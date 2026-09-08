@@ -2,6 +2,7 @@ package main.service;
 
 import main.domain.Cargo;
 import main.domain.Shipment;
+import main.domain.ShipmentInfo;
 
 public class ShipmentService {
     private final PricingService pricingService;
@@ -17,7 +18,7 @@ public class ShipmentService {
         this.notificationService = notificationService;
     }
 
-    public String validateCalculatePrintSaveAndNotify(Shipment shipment) {
+    public String validateCalculatePrintSaveAndNotify(Shipment shipment, ShipmentInfo shipmentInfo) {
         if (shipment.getCustomerState().isActive()) {
             if (!shipment.getCustomerState().isSuspended()) {
                 if (!shipment.getCargo().isEmpty()) {
@@ -29,15 +30,15 @@ public class ShipmentService {
                         totalValue += item.getDeclaredValue();
                         if (item.isHazardous()) hazardous = true;
                     }
-                    if (totalWeight > shipment.getShip().getCapacity()) return "ERROR_CAPACITY";
-                    if (hazardous && !permissionService.canCarryHazardous(shipment.getShip())) return "ERROR_PERMISSION";
+                    if (totalWeight > shipmentInfo.getShip().getCapacity()) return "ERROR_CAPACITY";
+                    if (hazardous && !permissionService.canCarryHazardous(shipmentInfo.getShip())) return "ERROR_PERMISSION";
 
                     double total = pricingService.calculatePrice(
                             totalWeight, totalValue, hazardous,
-                            shipment.getOrigin().getName(), shipment.getOrigin().getSector(), shipment.getOrigin().getSecurityLevel(),
-                            shipment.getDestination().getName(), shipment.getDestination().getSector(), shipment.getDestination().getSecurityLevel(),
+                            shipmentInfo.getOrigin().getName(), shipmentInfo.getOrigin().getSector(), shipmentInfo.getOrigin().getSecurityLevel(),
+                            shipmentInfo.getDestination().getName(), shipmentInfo.getDestination().getSector(), shipmentInfo.getDestination().getSecurityLevel(),
                             shipment.getCustomer().getLoyaltyYears(), shipment.getCustomerState().isActive(), shipment.getCustomerState().isSuspended(),
-                            shipment.getDepartureDate());
+                            shipmentInfo.getDepartureDate());
                     total += pricingService.calculateInsurance(totalValue, hazardous, shipment.getCustomer());
 
                     shipment.setTotal(total);
