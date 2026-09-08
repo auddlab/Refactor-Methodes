@@ -1,11 +1,12 @@
 package main.service;
 
 import main.domain.Customer;
+import main.domain.CustomerState;
 
 public class AccountService {
-    public int withdraw(Customer customer, double amount) {
-        if (customer.getAccountBalance() < amount) return -1;
-        customer.setAccountBalance(customer.getAccountBalance() - amount);
+    public int withdraw(CustomerState customerState, double amount) {
+        if (customerState.getAccountBalance() < amount) return -1;
+        customerState.setAccountBalance(customerState.getAccountBalance() - amount);
         return 0;
     }
 

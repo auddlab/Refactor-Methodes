@@ -7,6 +7,7 @@ import java.util.List;
 public class Shipment {
     private final String reference;
     private final Customer customer;
+    private final CustomerState customerState;
     private final Planet origin;
     private final Planet destination;
     private final Ship ship;
@@ -15,9 +16,10 @@ public class Shipment {
     private double total;
     private String status = "CREATED";
 
-    public Shipment(String reference, Customer customer, Planet origin, Planet destination, Ship ship, LocalDate departureDate) {
+    public Shipment(String reference, Customer customer, CustomerState customerState, Planet origin, Planet destination, Ship ship, LocalDate departureDate) {
         this.reference = reference;
         this.customer = customer;
+        this.customerState = customerState;
         this.origin = origin;
         this.destination = destination;
         this.ship = ship;
@@ -27,6 +29,7 @@ public class Shipment {
     public void addCargo(Cargo item) { cargo.add(item); }
     public String getReference() { return reference; }
     public Customer getCustomer() { return customer; }
+    public CustomerState getCustomerState() { return customerState; }
     public Planet getOrigin() { return origin; }
     public Planet getDestination() { return destination; }
     public Ship getShip() { return ship; }
